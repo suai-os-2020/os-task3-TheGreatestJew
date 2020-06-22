@@ -10,14 +10,11 @@ HANDLE Thread[THREADCOUNT];
 
 HANDLE Mutex;
 
-HANDLE SemD, SemE, SemG, SemH, SemH1, SemI, SemK; // SemH1,  SemI, SemK are for  HIK interval 
+HANDLE SemD, SemE, SemG, SemH; // SemD, SemE, SemG, SemH are for DEGH  SemH1, SemI, SemK are for  HIK interval 
 
 unsigned int lab3_thread_graph_id()
-
 {
-
 	return 4;
-
 }
 
 const char* lab3_unsynchronized_threads()
@@ -99,74 +96,27 @@ DWORD WINAPI thread_h(LPVOID text)
 		ReleaseSemaphore(SemD, 1, NULL);
 	}
 
-	return 0;
-}
-
-DWORD WINAPI thread_h1(LPVOID text) {
-	for (int i = 0; i < 4; ++i)
-	{
-		WaitForSingleObject(SemH1, INFINITE);
-		WaitForSingleObject(Mutex, INFINITE);
-		cout << (char const*)text << flush;
-		ReleaseMutex(Mutex);
-		computation();
-		ReleaseSemaphore(SemI, 1, NULL);
-	}
 
 	return 0;
 }
 
-DWORD WINAPI thread_i(LPVOID text)
-{
-	for (int i = 0; i < 4; ++i)
-	{
-		WaitForSingleObject(SemI, INFINITE);
-		WaitForSingleObject(Mutex, INFINITE);
-		cout << (char const*)text << flush;
-		ReleaseMutex(Mutex);
-		computation();
-		ReleaseSemaphore(SemK, 1, NULL);
-	}
-	return 0;
-}
 
-DWORD WINAPI thread_k(LPVOID text)
-{
-	for (int i = 0; i < 4; ++i)
-	{
-		WaitForSingleObject(SemK, INFINITE);
-		WaitForSingleObject(Mutex, INFINITE);
-		cout << (char const*)text << flush;
-		ReleaseMutex(Mutex);
-		computation();
-		ReleaseSemaphore(SemH1, 1, NULL);
-	}
-	return 0;
-}
 
 
 int lab3_init()
 
 {
-
 	DWORD ThreadID;
-
 	Mutex = CreateMutex(NULL, FALSE, NULL);
-
 	int count = 0;
 
 	if (Mutex == NULL)
-
-	{
-
+	{		
 		cout << "CreateMutex error " << GetLastError() << endl;
-
 		return 1;
-
 	}
 
 	SemD = CreateSemaphore(NULL, 1, 1, NULL);
-
 	if (SemD == NULL)
 	{
 		cout << "CreateSemaphore error: SemD" << GetLastError() << endl;
@@ -174,7 +124,6 @@ int lab3_init()
 	}
 
 	SemE = CreateSemaphore(NULL, 0, 1, NULL);
-
 	if (SemD == NULL)
 	{
 		cout << "CreateSemaphore error: SemE " << GetLastError() << endl;
@@ -182,7 +131,6 @@ int lab3_init()
 	}
 
 	SemG = CreateSemaphore(NULL, 0, 1, NULL);
-
 	if (SemD == NULL)
 	{
 		cout << "CreateSemaphore error: SemG" << GetLastError() << endl;
@@ -190,35 +138,9 @@ int lab3_init()
 	}
 
 	SemH = CreateSemaphore(NULL, 0, 1, NULL);
-
 	if (SemD == NULL)
 	{
 		cout << "CreateSemaphore error: SemH" << GetLastError() << endl;
-		return 1;
-	}
-
-	SemH1 = CreateSemaphore(NULL, 1, 1, NULL);
-
-	if (SemH1 == NULL)
-	{
-		cout << "CreateSemaphore error: SemH1" << GetLastError() << endl;
-		return 1;
-	}
-
-
-	SemI = CreateSemaphore(NULL, 0, 1, NULL);
-
-	if (SemH1 == NULL)
-	{
-		cout << "CreateSemaphore error: SemI " << GetLastError() << endl;
-		return 1;
-	}
-
-	SemK = CreateSemaphore(NULL, 0, 1, NULL);
-
-	if (SemH1 == NULL)
-	{
-		cout << "CreateSemaphore error: SemK" << GetLastError() << endl;
 		return 1;
 	}
 
@@ -315,31 +237,22 @@ int lab3_init()
 	count = 0;
 
 	char const* textsHIK[] = { "h", "i", "k" };
-	Thread[0] = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)thread_h1, (void*)textsHIK[0], 0, &ThreadID);
-	if (Thread[0] == NULL)
+	for (int i = 0; i < 3; ++i)
 	{
-		cout << "CreateThread error: " << textsHIK[0] << GetLastError() << endl;
-		return 1;
+		Thread[i] = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)threads_unsynchronized, (void*)textsHIK[i], 0, &ThreadID);
+		if (Thread[i] == NULL)
+		{
+			cout << "CreateThread error: " << textsHIK[i] << GetLastError() << endl;
+			return 1;
+		}
+		else ++count;
 	}
 
-	Thread[1] = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)thread_i, (void*)textsHIK[1], 0, &ThreadID);
-	if (Thread[1] == NULL)
-	{
-		cout << "CreateThread error: " << textsHIK[1] << GetLastError() << endl;
-		return 1;
-	}
-
-	Thread[2] = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)thread_k, (void*)textsHIK[2], 0, &ThreadID);
-	if (Thread[2] == NULL)
-	{
-		cout << "CreateThread error: " << textsHIK[2] << GetLastError() << endl;
-		return 1;
-	}
-
-	for (int i = 0; i < 2; ++i) {
+	for (int i = 0; i < count; ++i) {
 		WaitForSingleObject(Thread[i], INFINITE);
 	}
 
+	count = 0;
 
 
 	char const* textsM = "m";
@@ -359,9 +272,6 @@ int lab3_init()
 	CloseHandle(SemE);
 	CloseHandle(SemG);
 	CloseHandle(SemH);
-	CloseHandle(SemH1);
-	CloseHandle(SemI);
-	CloseHandle(SemK);
 	CloseHandle(Mutex);
 	cout << endl;
 	return 0;
