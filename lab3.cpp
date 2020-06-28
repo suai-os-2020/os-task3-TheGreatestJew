@@ -96,7 +96,7 @@ DWORD WINAPI thread_d(LPVOID lpParam)
 		cout << 'd' << flush;
 		ReleaseMutex(Mutex);
 		computation();
-		ReleaseSemaphore(SemE, 1, NULL);
+		ReleaseSemaphore(SemE, 1, nullptr);
 	}
 
 	
@@ -132,7 +132,7 @@ DWORD WINAPI thread_e(LPVOID lpParam)
 		cout << 'e' << flush;
 		ReleaseMutex(Mutex);
 		computation();
-		ReleaseSemaphore(SemG, 1, NULL);
+		ReleaseSemaphore(SemG, 1, nullptr);
 	}
 	ReleaseSemaphore(wait_interval, 1, nullptr);    //current interval ended
 	WaitForSingleObject(start_interval, INFINITE);  //start new interval
@@ -156,7 +156,7 @@ DWORD WINAPI thread_g(LPVOID lpParam)
 		cout << 'g' << flush;
 		ReleaseMutex(Mutex);
 		computation();
-		ReleaseSemaphore(SemH, 1, NULL);
+		ReleaseSemaphore(SemH, 1, nullptr);
 	}
 
 	ReleaseSemaphore(wait_interval, 1, nullptr);    //current interval ended
@@ -180,7 +180,7 @@ DWORD WINAPI thread_h(LPVOID lpParam)
 		cout << 'h' << flush;
 		ReleaseMutex(Mutex);
 		computation();
-		ReleaseSemaphore(SemD, 1, NULL);
+		ReleaseSemaphore(SemD, 1, nullptr);
 	}
 
 	ReleaseSemaphore(wait_interval, 1, nullptr);    //current interval ended
@@ -256,51 +256,51 @@ DWORD WINAPI thread_m(LPVOID lpParam)
 
 int lab3_init()
 {
-	Mutex = CreateMutex(NULL, FALSE, NULL);
+	Mutex = CreateMutex(nullptr, FALSE, nullptr);
 	
 
-	if (Mutex == NULL)
+	if (Mutex == nullptr)
 	{		
 		cout << "CreateMutex error " << GetLastError() << endl;
 		return 1;
 	}
 
-	SemD = CreateSemaphore(NULL, 1, 1, NULL);
-	if (SemD == NULL)
+	SemD = CreateSemaphore(nullptr, 1, 1, nullptr);
+	if (SemD == nullptr)
 	{
 		cout << "CreateSemaphore error: SemD" << GetLastError() << endl;
 		return 1;
 	}
 
-	SemE = CreateSemaphore(NULL, 0, 1, NULL);
-	if (SemD == NULL)
+	SemE = CreateSemaphore(nullptr, 0, 1, nullptr);
+	if (SemD == nullptr)
 	{
 		cout << "CreateSemaphore error: SemE " << GetLastError() << endl;
 		return 1;
 	}
 
-	SemG = CreateSemaphore(NULL, 0, 1, NULL);
-	if (SemD == NULL)
+	SemG = CreateSemaphore(nullptr, 0, 1, nullptr);
+	if (SemD == nullptr)
 	{
 		cout << "CreateSemaphore error: SemG" << GetLastError() << endl;
 		return 1;
 	}
 
-	SemH = CreateSemaphore(NULL, 0, 1, NULL);
-	if (SemD == NULL)
+	SemH = CreateSemaphore(nullptr, 0, 1, nullptr);
+	if (SemD == nullptr)
 	{
 		cout << "CreateSemaphore error: SemH" << GetLastError() << endl;
 		return 1;
 	}
 
-	wait_interval = CreateSemaphore(NULL, 0, 3, NULL);
-	if (wait_interval == NULL)
+	wait_interval = CreateSemaphore(nullptr, 0, 3, nullptr);
+	if (wait_interval == nullptr)
 	{
 		cout << "CreateSemaphore error: wait_interval" << GetLastError() << endl;
 		return 1;
 	}
-	start_interval = CreateSemaphore(NULL, 0, 3, NULL);
-	if (start_interval == NULL)
+	start_interval = CreateSemaphore(nullptr, 0, 3, nullptr);
+	if (start_interval == nullptr)
 	{
 		cout << "CreateSemaphore error: start_interval" << GetLastError() << endl;
 		return 1;
@@ -309,17 +309,17 @@ int lab3_init()
 	HANDLE threadA, threadB, threadC, threadD, threadE, threadF, threadG, threadH, threadI, threadK, threadM;
 
 	//1-st interval
-	threadA = CreateThread(NULL, 0, thread_a, NULL, 0, NULL);
-	if (threadA == NULL) return GetLastError();
+	threadA = CreateThread(nullptr, 0, thread_a, nullptr, 0, nullptr);
+	if (threadA == nullptr) return GetLastError();
 
-	threadC = CreateThread(NULL, 0, thread_c, NULL, 0, NULL);
-	if (threadC == NULL) return GetLastError();
+	threadC = CreateThread(nullptr, 0, thread_c, nullptr, 0, nullptr);
+	if (threadC == nullptr) return GetLastError();
 
-	threadD = CreateThread(NULL, 0, thread_d, NULL, 0, NULL);
-	if (threadD == NULL) return GetLastError();
+	threadD = CreateThread(nullptr, 0, thread_d, nullptr, 0, nullptr);
+	if (threadD == nullptr) return GetLastError();
 
-	threadE = CreateThread(NULL, 0, thread_e, NULL, 0, NULL);
-	if (threadE == NULL) return GetLastError();
+	threadE = CreateThread(nullptr, 0, thread_e, nullptr, 0, nullptr);
+	if (threadE == nullptr) return GetLastError();
 
 	WaitForSingleObject(threadA, INFINITE);                              //join with ended thread A
 	WaitForSingleObject(wait_interval, INFINITE);                   //wait for thread C to finish
@@ -328,12 +328,12 @@ int lab3_init()
 
 	//2-d interval
 
-	ReleaseSemaphore(start_interval, 1, NULL);            //continue thread C
-	ReleaseSemaphore(start_interval, 1, NULL);            //continue thread D
-	ReleaseSemaphore(start_interval, 1, NULL);            //continue thread E
+	ReleaseSemaphore(start_interval, 1, nullptr);            //continue thread C
+	ReleaseSemaphore(start_interval, 1, nullptr);            //continue thread D
+	ReleaseSemaphore(start_interval, 1, nullptr);            //continue thread E
 
-	threadB = CreateThread(NULL, 0, thread_b, NULL, 0, NULL);
-	if (threadB == NULL) return GetLastError();
+	threadB = CreateThread(nullptr, 0, thread_b, nullptr, 0, nullptr);
+	if (threadB == nullptr) return GetLastError();
 
 	WaitForSingleObject(threadC, INFINITE);						//join with ended thread C
 	WaitForSingleObject(threadB, INFINITE);						//join with ended thread B
@@ -341,26 +341,26 @@ int lab3_init()
 	WaitForSingleObject(wait_interval, INFINITE);                 //wait for thread E to finish
 
 	//3-d interval
-	ReleaseSemaphore(start_interval, 1, NULL);            //continue thread D
-	ReleaseSemaphore(start_interval, 1, NULL);            //continue thread E
+	ReleaseSemaphore(start_interval, 1, nullptr);            //continue thread D
+	ReleaseSemaphore(start_interval, 1, nullptr);            //continue thread E
 
 
-	threadG = CreateThread(NULL, 0, thread_g, NULL, 0, NULL);
-	if (threadG == NULL) return GetLastError();
+	threadG = CreateThread(nullptr, 0, thread_g, nullptr, 0, nullptr);
+	if (threadG == nullptr) return GetLastError();
 
-	threadH = CreateThread(NULL, 0, thread_h, NULL, 0, NULL);
-	if (threadH == NULL) return GetLastError();
+	threadH = CreateThread(nullptr, 0, thread_h, nullptr, 0, nullptr);
+	if (threadH == nullptr) return GetLastError();
 	WaitForSingleObject(threadD, INFINITE);						//join with ended thread D
 	WaitForSingleObject(wait_interval, INFINITE);                   //wait for thread E to finish
 	WaitForSingleObject(wait_interval, INFINITE);                 //wait for thread G to finish
 	WaitForSingleObject(wait_interval, INFINITE);                 //wait for thread H to finish
 
 	//4-th interval
-	ReleaseSemaphore(start_interval, 1, NULL);            //continue thread G
-	ReleaseSemaphore(start_interval, 1, NULL);            //continue thread E
-	ReleaseSemaphore(start_interval, 1, NULL);            //continue thread H
-	threadF = CreateThread(NULL, 0, thread_f, NULL, 0, NULL);
-	if (threadF == NULL) return GetLastError();
+	ReleaseSemaphore(start_interval, 1, nullptr);            //continue thread G
+	ReleaseSemaphore(start_interval, 1, nullptr);            //continue thread E
+	ReleaseSemaphore(start_interval, 1, nullptr);            //continue thread H
+	threadF = CreateThread(nullptr, 0, thread_f, nullptr, 0, nullptr);
+	if (threadF == nullptr) return GetLastError();
 	WaitForSingleObject(threadG, INFINITE);						//join with ended thread G
 	WaitForSingleObject(threadE, INFINITE);						//join with ended thread E
 	WaitForSingleObject(threadF, INFINITE);						//join with ended thread F
@@ -368,18 +368,18 @@ int lab3_init()
 
 
 	//5-th interval
-	ReleaseSemaphore(start_interval, 1, NULL);            //continue thread H
-	threadI = CreateThread(NULL, 0, thread_i, NULL, 0, NULL);
-	if (threadI == NULL) return GetLastError();
-	threadK = CreateThread(NULL, 0, thread_k, NULL, 0, NULL);
-	if (threadK == NULL) return GetLastError();
+	ReleaseSemaphore(start_interval, 1, nullptr);            //continue thread H
+	threadI = CreateThread(nullptr, 0, thread_i, nullptr, 0, nullptr);
+	if (threadI == nullptr) return GetLastError();
+	threadK = CreateThread(nullptr, 0, thread_k, nullptr, 0, nullptr);
+	if (threadK == nullptr) return GetLastError();
 	WaitForSingleObject(threadH, INFINITE);						//join with ended thread H
 	WaitForSingleObject(threadI, INFINITE);						//join with ended thread I
 	WaitForSingleObject(threadK, INFINITE);						//join with ended thread K
 
 	//6-th interval
-	threadM = CreateThread(NULL, 0, thread_m, NULL, 0, NULL);
-	if (threadM == NULL) return GetLastError();
+	threadM = CreateThread(nullptr, 0, thread_m, nullptr, 0, nullptr);
+	if (threadM == nullptr) return GetLastError();
 	WaitForSingleObject(threadM, INFINITE);						//join with ended thread M
 
 
