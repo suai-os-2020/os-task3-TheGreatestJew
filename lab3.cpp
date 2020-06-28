@@ -1,4 +1,3 @@
-
 #include "lab3.h"
 #include <windows.h>
 #include <stdio.h>
@@ -406,9 +405,5 @@ int lab3_init()
 	CloseHandle(start_interval);
 	CloseHandle(Mutex);
 	cout << endl;
-	system("pause");
-	cout << endl;
 	return 0;
 }
-
-
